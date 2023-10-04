@@ -3,7 +3,7 @@
 
 #define MAX 20
 
-int n,m;
+int N,M;
 float A[MAX][MAX], B[MAX*MAX];
 
 void swap(float *x, float *y)
@@ -16,12 +16,15 @@ void swap(float *x, float *y)
 //Calculates the produce of each column
 void prodcolumns(float A[MAX][MAX])
 {
-    for (int j=0; j<m; j++)
+    for (int j=1; j<=M; j++)
     {
         float P=1;
-        for (int i=0; i<n; i++)
-            P*=A[i][j];
-        printf("The produce of all elements from column %d is: %.2f \n", j+1, P);
+        for (int i=0; i<N; i++)
+            if (A[i][j]!=0)
+            {
+                P*=A[i][j];
+            }
+        printf("The produce of all elements from column %d is: %.2f \n", j, P);
     }
     printf("\n");
 }
@@ -30,14 +33,14 @@ void prodcolumns(float A[MAX][MAX])
 void sumperimeter(float A[MAX][MAX])
 {
     float S=0;
-    for (int j=0; j<m; j++)
+    for (int j=0; j<M; j++)
         S+=A[0][j];
-    for (int j=0; j<m; j++)
-        S+=A[n-1][j];
-    for (int i=1; i<n-1; i++)
+    for (int j=0; j<M; j++)
+        S+=A[N-1][j];
+    for (int i=1; i<N-1; i++)
         S+=A[i][0];
-    for (int i=1; i<n-1; i++)
-        S+=A[i][m-1];
+    for (int i=1; i<N-1; i++)
+        S+=A[i][M-1];
     printf("The sum of the elements around the perimeter of the matrix is: %.2f\n", S);
 }
 
@@ -74,8 +77,8 @@ void quicksort(float A[], int start, int end)
 void Convert(float B[MAX*MAX], float A[MAX][MAX])
 {
     int k=0;
-    for (int i=0; i<n; i++)
-        for(int j=0; j<m; j++)
+    for (int i=0; i<N; i++)
+        for(int j=0; j<M; j++)
         {
             B[k]=A[i][j];
             k++;
@@ -89,13 +92,13 @@ void spiral(float A[MAX][MAX], float B[MAX * MAX], int row, int col)
     while (p>0 && o>0)
     {
         //right
-        for (j=m-p; j<p && k<n*m; j++)
+        for (j=M-p; j<p && k<N*M; j++)
         {
-            A[n-o][j]=B[k];
+            A[N-o][j]=B[k];
             k++;
         }
         //down
-        for (i=n-o+1; i<o && k<n*m; i++)
+        for (i=N-o+1; i<o && k<N*M; i++)
         {
             A[i][p-1]=B[k];
             k++;
@@ -103,13 +106,13 @@ void spiral(float A[MAX][MAX], float B[MAX * MAX], int row, int col)
         o--;
         p--;
         //left
-        for (j=p-1; j>=m-p-1 && k<n*m; j--)
+        for (j=p-1; j>=M-p-1 && k<N*M; j--)
         {
             A[i-1][j]=B[k];
             k++;
         }
         //up
-        for (i=o-1; i>=n-o && k<n*m; i--)
+        for (i=o-1; i>=N-o && k<N*M; i--)
         {
             A[i][j+1]=B[k];
             k++;
@@ -119,17 +122,17 @@ void spiral(float A[MAX][MAX], float B[MAX * MAX], int row, int col)
 int main()
 {
     printf("Insert number of rows and columns (up to %d):", MAX);
-    scanf("%d %d", &n, &m);
+    scanf("%d %d", &N, &M);
 
-    if (n<=0 || n>MAX || m<=0 || m>MAX)
+    if (N<=0 || N>MAX || M<=0 || M>MAX)
     {
         printf("Invalid input. Rows and columns must be between 1 and %d.\n", MAX);
         return 0;
     }
 
-    for (int i=0; i<n; i++)
+    for (int i=0; i<N; i++)
     {
-        for (int j=0; j<m; j++)
+        for (int j=0; j<M; j++)
             scanf("%f", &A[i][j]);
     }
     //Base task
@@ -138,19 +141,19 @@ int main()
 
     //Show the sorted conversion of A into a one dimensional array
     Convert(B,A);
-    quicksort(B, 0, n*m - 1);
+    quicksort(B, 0, N*M - 1);
     printf("\n");
-    for (int i=0; i<n*m; i++)
+    for (int i=0; i<N*M; i++)
     {
         printf("%.2f ", B[i]);
     }
     printf("\n\n");
 
     //Arrange the sorted elements in the desired spiral
-    spiral(A,B,n,m);
-    for (int i=0; i<n; i++)
+    spiral(A,B,N,M);
+    for (int i=0; i<N; i++)
     {
-        for (int j=0; j<m; j++)
+        for (int j=0; j<M; j++)
             printf("%.2f ", A[i][j]);
         printf("\n");
     }
