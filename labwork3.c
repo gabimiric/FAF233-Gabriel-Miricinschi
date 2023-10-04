@@ -16,7 +16,7 @@ void swap(float *x, float *y)
 //Calculates the produce of each column
 void prodcolumns(float A[MAX][MAX])
 {
-    for (int j=1; j<=M; j++)
+    for (int j=0; j<M; j++)
     {
         float P=1;
         for (int i=0; i<N; i++)
@@ -24,7 +24,7 @@ void prodcolumns(float A[MAX][MAX])
             {
                 P*=A[i][j];
             }
-        printf("The produce of all elements from column %d is: %.2f \n", j, P);
+        printf("The produce of all non-zero elements from column %d is: %.2f \n", j+1, P);
     }
     printf("\n");
 }
