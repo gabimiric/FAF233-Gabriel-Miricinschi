@@ -40,15 +40,29 @@ void punc(char str[MAX])
 //Medium Task: Check if the given input is a valid email
 void email(char str[MAX])
 {
-    int i=0, j=0, valid;
-    for (i=0; i<=strlen(str); i++)
-        if (str[i]=='@') break;
-    for (j=i; j<strlen(str); j++)
-        if (strchr("~!$%^&*_=+}{'?-.", str[j]) || ((str[i-1]>='a' || str[i-1]<='z') || (str[i-1]>='A' && str[i-1]<='Z') || (str[i-1]>='0' && str[i-1]<='9')))
-            valid=1;
-    for (j=i; j>=0; j--)
-        if (strchr("~!$%^&*_=+}{'?-.", str[j]) || ((str[i-1]>='a' || str[i-1]<='z') || (str[i-1]>='A' && str[i-1]<='Z') || (str[i-1]>='0' && str[i-1]<='9')))
-            valid=1;
+    int i=0, j=0, valid=0, at=0;
+    while (i<strlen(str))
+    {
+        if (str[i]=='@') at++;
+        i++;
+    }
+    if (at>1) {goto jump;}
+    else
+    {
+        for (j=i+1; j<strlen(str); j++)
+        {
+            if (strchr("~!$%^&*_=+}{'?-.", str[j]) || ((str[j]>='a' || str[j]<='z') || (str[j]>='A' && str[j]<='Z') || (str[j]>='0' && str[j]<='9')))
+                valid=1;
+            else {valid=0; break;}
+        }
+        for (j=i-1; j>=0; j--)
+        {
+            if (strchr("~!$%^&*_=+}{'?-.", str[j]) || ((str[j]>='a' || str[j]<='z') || (str[j]>='A' && str[j]<='Z') || (str[j]>='0' && str[j]<='9')))
+                valid=1;
+            else {valid=0; break;}
+        }
+    }
+    jump:
     if (valid) printf("The given string can be an email.\n");
     else printf("The given string cannot be an email.\n");
 }
@@ -65,7 +79,7 @@ void upper(char str[MAX])
 
 int main()
 {
-    int i;
+    int i=0;
 
     printf("Input your sentence: ");
     do
@@ -79,6 +93,8 @@ int main()
     length(str);
     punc(str);
 
+    printf("\nInput your string: ");
+    scanf("%s",&str);
     email(str);
     upper(str);
 }
