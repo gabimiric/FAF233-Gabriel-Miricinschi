@@ -79,5 +79,6 @@ int main()
     length(str);
     punc(str);
 
+    email(str);
     upper(str);
 }
