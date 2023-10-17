@@ -40,17 +40,18 @@ void punc(char str[MAX])
 //Medium Task: Check if the given input is a valid email
 void email(char s[MAX])
 {
-    int i=0, k=0, j=0, valid=0, at=0;
+    int i=0, k=0, j=0, valid=0, at=0, m=0;
     while (i<strlen(s))
     {
         if (s[i]=='@') {at++; k=i;}
         i++;
     }
-    if (at>1||k==0||k==strlen(s)||strchr("~!$%^&*_=+}{'?-.", s[k+1])||strchr("~!$%^&*_=+}{'?-.", s[strlen(s)-1]))goto jump;
+    if (at>1||k==0||k==strlen(s)||strchr("~!$%^&*_=+}{'?-.", s[k+1])||strchr("~!$%^&*_=+}{'?-.", s[strlen(s)-1])||strchr("~!$%^&*_=+}{'?-.", s[0]))goto jump;
     else
     {
         for (j=k+1; j<strlen(s); j++)
         {
+            if (s[j]=='.') m++;
             if (strchr("~!$%^&*_=+}{'?-.", s[j]) || ((s[j]>='a' || s[j]<='z') || (s[j]>='A' && s[j]<='Z') || (s[j]>='0' && s[j]<='9')))
                 valid=1;
             else {valid=0; break;}
@@ -61,6 +62,7 @@ void email(char s[MAX])
                 valid=1;
             else {valid=0; break;}
         }
+        if (m<1) valid=0;
     }
     jump:
     if (valid) printf("The given string CAN be an email.\n");
