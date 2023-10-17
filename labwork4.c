@@ -38,33 +38,33 @@ void punc(char str[MAX])
 }
 
 //Medium Task: Check if the given input is a valid email
-void email(char str[MAX])
+void email(char s[MAX])
 {
-    int i=0, j=0, valid=0, at=0;
-    while (i<strlen(str))
+    int i=0, k=0, j=0, valid=0, at=0;
+    while (i<strlen(s))
     {
-        if (str[i]=='@') at++;
+        if (s[i]=='@') {at++; k=i;}
         i++;
     }
-    if (at>1) {goto jump;}
+    if (at>1||k==0||k==strlen(s)||strchr("~!$%^&*_=+}{'?-.", s[k+1])||strchr("~!$%^&*_=+}{'?-.", s[strlen(s)-1]))goto jump;
     else
     {
-        for (j=i+1; j<strlen(str); j++)
+        for (j=k+1; j<strlen(s); j++)
         {
-            if (strchr("~!$%^&*_=+}{'?-.", str[j]) || ((str[j]>='a' || str[j]<='z') || (str[j]>='A' && str[j]<='Z') || (str[j]>='0' && str[j]<='9')))
+            if (strchr("~!$%^&*_=+}{'?-.", s[j]) || ((s[j]>='a' || s[j]<='z') || (s[j]>='A' && s[j]<='Z') || (s[j]>='0' && s[j]<='9')))
                 valid=1;
             else {valid=0; break;}
         }
-        for (j=i-1; j>=0; j--)
+        for (j=k-1; j>=0; j--)
         {
-            if (strchr("~!$%^&*_=+}{'?-.", str[j]) || ((str[j]>='a' || str[j]<='z') || (str[j]>='A' && str[j]<='Z') || (str[j]>='0' && str[j]<='9')))
+            if (strchr("~!$%^&*_=+}{'?-.", s[j]) || ((s[j]>='a' || s[j]<='z') || (s[j]>='A' && s[j]<='Z') || (s[j]>='0' && s[j]<='9')))
                 valid=1;
             else {valid=0; break;}
         }
     }
     jump:
-    if (valid) printf("The given string can be an email.\n");
-    else printf("The given string cannot be an email.\n");
+    if (valid) printf("The given string CAN be an email.\n");
+    else printf("The given string CANNOT be an email.\n");
 }
 
 //Easy Task: Convert the lowercase letters into uppercase
