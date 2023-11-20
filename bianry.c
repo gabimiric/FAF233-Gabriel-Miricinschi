@@ -1,7 +1,8 @@
 #include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
-#define COUNT 10
+#include <math.h>
+#define COUNT 3
 
 //The backbone structure of the binary tree
 struct Node {
@@ -19,38 +20,6 @@ struct Node* newNode(int data)
     return node;
 }
 
-//"Base"/Mandatory task to display the tree
-void print2DUtil(struct Node* root, int space)
-{
-    if (root == NULL)
-        return;
-
-    space += COUNT;
- 
-    print2DUtil(root->right, space);
- 
-    printf("\n");
-    for (int i = COUNT; i < space; i++)
-        printf(" ");
-    printf("%d\n", root->data);
- 
-    print2DUtil(root->left, space);
-}
-
-//Function to insert a value into the tree
-struct Node* insert(struct Node* root, int value)
-{
-    if (root == NULL)
-        return newNode(value);
-
-    if (value < root->data)
-        root->left = insert(root->left, value);
-    else if (value > root->data)
-        root->right = insert(root->right, value);
-
-    return root;
-}
-
 //Function to find the maximum between 2 ints
 int max(int a, int b) {
     return (a > b) ? a : b;
@@ -66,6 +35,103 @@ int height(struct Node* root)
     int rightHeight = height(root->right);
 
     return 1 + max(leftHeight, rightHeight);
+}
+
+//"Base"/Mandatory task to display the tree
+//Helper function to print spaces
+void printSpaces(int n) 
+{
+    for (int i = 0; i < n; i++)
+        printf(" ");
+}
+//Helper function to calculate the width of a number
+int numWidth(int num) 
+{
+    int width = 0;
+    do {
+        width++;
+        num /= 10;
+    } while (num != 0);
+    return width;
+}
+// Function to print the binary tree
+void printBinaryTree(struct Node* root) 
+{
+    if (root == NULL)
+        return;
+
+    int treeHeight = height(root);
+
+    struct Node** queue = (struct Node**)malloc(sizeof(struct Node*) * 1000);
+    int front = 0, rear = 0;
+
+    queue[rear++] = root;
+    int totalSpaces = COUNT * pow(2, treeHeight);
+    int spacesBetweenNodes = totalSpaces/2;
+    int spacesFromLeft = totalSpaces/2;
+    for (int i = 0; i < treeHeight; i++) {
+        int nodesAtLevel = pow(2, i);
+        spacesFromLeft = (totalSpaces - spacesBetweenNodes*(nodesAtLevel - 1))/2;
+
+        for (int j = 0; j < nodesAtLevel; j++) 
+        {
+            struct Node* node = queue[front++];
+
+            if (node == NULL) 
+            {
+                printSpaces(spacesBetweenNodes);
+                if (j == 0)
+                    printSpaces(spacesFromLeft);
+                queue[rear++] = NULL;
+                queue[rear++] = NULL;
+            } 
+            else 
+            {
+                int nodeWidth = numWidth(node->data);
+                if (j == 0)
+                    printSpaces(spacesFromLeft);
+                printf("%d", node->data);
+                printSpaces(spacesBetweenNodes - nodeWidth);
+                queue[rear++] = node->left;
+                queue[rear++] = node->right;
+            }
+        }
+        spacesBetweenNodes = spacesFromLeft;
+        printf("\n");
+    }
+
+    free(queue);
+}
+
+/*void print2DUtil(struct Node* root, int space)
+{
+    if (root == NULL)
+        return;
+
+    space += COUNT;
+ 
+    print2DUtil(root->right, space);
+ 
+    printf("\n");
+    for (int i = COUNT; i < space; i++)
+        printf(" ");
+    printf("%d\n", root->data);
+ 
+    print2DUtil(root->left, space);
+}*/
+
+//Function to insert a value into the tree
+struct Node* insert(struct Node* root, int value)
+{
+    if (root == NULL)
+        return newNode(value);
+
+    if (value < root->data)
+        root->left = insert(root->left, value);
+    else if (value > root->data)
+        root->right = insert(root->right, value);
+
+    return root;
 }
 
 //Easy: Create a function to count the number of leaf nodes in the binary tree.
@@ -181,7 +247,7 @@ int main()
     }
 
     printf("\nBinary Tree:\n");
-    print2DUtil(root, 0);
+    printBinaryTree(root);
 
     //E1
     printf("\nThe height of the given tree is %d.\n", height(root));
@@ -208,7 +274,7 @@ int main()
     scanf("%d", &delete);
     root = deleteNode(root, delete);
     printf("\nBinary Tree after deletion:\n");
-    print2DUtil(root, 0);
+    printBinaryTree(root);
 
     //M3
     if (isBalanced(root))
