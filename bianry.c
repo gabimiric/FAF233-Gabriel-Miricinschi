@@ -101,6 +101,7 @@ struct Node* findLCA(struct Node* root, int n1, int n2)
         return rightLCA;
 }
 
+/*
 //Medium: Create a function to delete a node with a given value from the binary search tree. Ensure that the tree remains a valid binary search tree after the deletion.
 struct Node* deleteNode(struct Node* root, int key) 
 {
@@ -119,7 +120,41 @@ struct Node* deleteNode(struct Node* root, int key)
     }
 
     return root;
+}*/
+
+//Medium: Create a function to delete a node with a given value from the binary search tree. Ensure that the tree remains a valid binary search tree after the deletion.
+struct Node* deleteNode(struct Node* root, int key) 
+{
+    if (root == NULL)
+        return root;
+
+    // Recursive deletion based on key
+    if (key < root->data)
+        root->left = deleteNode(root->left, key);
+    else if (key > root->data)
+        root->right = deleteNode(root->right, key);
+    else {
+        if (root->left == NULL) {
+            struct Node* temp = root->right;
+            free(root);
+            return temp;
+        } else if (root->right == NULL) {
+            struct Node* temp = root->left;
+            free(root);
+            return temp;
+        }
+
+        struct Node* successor = root->right;
+        while (successor->left != NULL)
+            successor = successor->left;
+
+        root->data = successor->data;
+
+        root->right = deleteNode(root->right, successor->data);
+    }
+    return root;
 }
+
 
 //Medium: Create a function to check if the binary tree is balanced.
 int isBalanced(struct Node* root) 
@@ -149,9 +184,9 @@ int main()
     print2DUtil(root, 0);
 
     //E1
-    printf("The height of the given tree is %d.\n", height(root));
+    printf("\nThe height of the given tree is %d.\n", height(root));
     //E2
-    printf("The tree has %d leaf nodes.", countLeafNodes(root));
+    printf("\nThe tree has %d leaf nodes.\n", countLeafNodes(root));
 
     //M1
     int value1, value2;
