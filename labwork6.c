@@ -22,7 +22,10 @@ struct Node* newNode(int data)
 
 //Function to find the maximum between 2 ints
 int max(int a, int b) {
-    return (a > b) ? a : b;
+    if (a > b)
+        return a;
+    else
+        return b;
 }
 
 //Easy: Create a function to calculate the height of a binary tree.
@@ -250,7 +253,7 @@ int main()
     printBinaryTree(root);
 
     //E1
-    printf("\nThe height of the given tree is %d.\n", height(root));
+    printf("\nThe height of the given tree is %d.\n", height(root) - 1);
     //E2
     printf("\nThe tree has %d leaf nodes.\n", countLeafNodes(root));
 
