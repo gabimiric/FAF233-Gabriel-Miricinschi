@@ -2,7 +2,6 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
-#include <time.h>
 #include <graphics.h>
 
 #define MAX 50
@@ -24,7 +23,7 @@ int guess(char word[], char guessed[], char check)
 
 void randomWord(const char wordList[][MAX], char word[MAX], int wordCount)
 {
-    int i = (rand()*rand()+rand()) % wordCount;
+    int i = rand() % wordCount;
     strcpy(word,wordList[i]);
 }
 
@@ -84,7 +83,7 @@ void stickman(int mistake, char guessed[MAX], char word[MAX])
     }
 }
 
-int game(const char LVL[][MAX], char word[MAX], char guessed[MAX], int level)
+int game(const char LVL[][MAX], char word[MAX], char guessed[MAX], int level, int wordCount)
 {
     char check;
     char answer[MAX];
@@ -93,7 +92,7 @@ int game(const char LVL[][MAX], char word[MAX], char guessed[MAX], int level)
     if (level)
     {
         printf("Level %d:\n", level);
-        randomWord(LVL, word, sizeof(LVL));
+        randomWord(LVL, word, wordCount);
     }
 
     for (int i = 0; i < strlen(word); i++)
@@ -154,12 +153,13 @@ int game(const char LVL[][MAX], char word[MAX], char guessed[MAX], int level)
 
 int main()
 {
-    srand((unsigned int)time(NULL));
-    const char LVL1[][MAX] = {"cat", "door", "fish", "blue", "jump", "apple", "frog", "hat", "banana", "bird"};
-    const char LVL2[][MAX] = {"happy", "grape", "music", "blend", "sunny", "quick", "tiger", "beach", "globe", "wrist"};
-    const char LVL3[][MAX] = {"chase", "frost", "plush", "swirl", "jazzy", "gears", "trump", "sleek", "oasis", "whale"};
-    const char LVL4[][MAX] = {"quest", "blitz", "jumbo", "vivid", "mirth", "azure", "quirk", "lunar", "plaza", "haste"};
-    const char LVL5[][MAX] = {"ambitious", "juxtapose", "syndicate", "mnemonic", "labyrinth", "antiderivative", "paradox", "retribution", "boulevard", "peripheral", "parallelogram", "polyglot", "pneumonia", "tritrate", "euphoria", "quizzical", "emulsify", "magnanomous", "quixotic", "pneumonoultramicroscopicsilicovolcanoconiosis"};
+    unsigned int seed = (unsigned int)GetCurrentProcessId();
+    srand(seed);
+    const char LVL1[][MAX] = {"apple", "banana", "orange", "grape", "cat", "dog", "elephant", "lion", "monkey", "turtle"};
+    const char LVL2[][MAX] = {"house", "garden", "table", "chair", "book", "computer", "sun", "moon", "clock", "door"};
+    const char LVL3[][MAX] = {"puzzle", "giraffe", "umbrella", "whisper", "champion", "fantastic", "adventure", "detective", "magnificent", "mysterious"};
+    const char LVL4[][MAX] = {"adequate", "coherent", "comprehensive", "efficiency", "elaborate", "innovation", "persuasive", "reliable", "sophisticated", "versatile"};
+    const char LVL5[][MAX] = {"ambitious", "juxtapose", "syndicate", "mnemonic", "labyrinth", "antiderivative", "paradox", "retribution", "boulevard", "peripheral", "parallelogram", "polyglot", "pneumonia", "titrate", "euphoria", "quizzical", "emulsify", "magnanimous", "quixotic", "pneumonoultramicroscopicsilicovolcanoconiosis"};
     char word[MAX];
     char guessed[MAX];
     char answer[MAX];
@@ -187,7 +187,7 @@ int main()
         for (int i=0;i<strlen(word);i++)
             word[i] = tolower(word[i]);
         system("cls");
-        cont = game(LVL1,word, guessed,0);
+        cont = game(LVL1,word, guessed,0,1);
         if (cont==1||cont==0)
             goto multiplayer;
         else
@@ -205,27 +205,27 @@ int main()
     {
         start:
         cleardevice();
-        cont = game(LVL1, word, guessed,1);
+        cont = game(LVL1, word, guessed,1,sizeof(LVL1)/MAX);
         if (cont==0)
             goto start;
         else if (cont==2)
             goto end;
-        cont = game(LVL2, word, guessed,2);
+        cont = game(LVL2, word, guessed,2,sizeof(LVL2)/MAX);
         if (cont==0)
             goto start;
         else if (cont==2)
             goto end;
-        cont = game(LVL3, word, guessed,3);
+        cont = game(LVL3, word, guessed,3,sizeof(LVL3)/MAX);
         if (cont==0)
             goto start;
         else if (cont==2)
             goto end;
-        cont = game(LVL4, word, guessed,4);
+        cont = game(LVL4, word, guessed,4,sizeof(LVL4)/MAX);
         if (cont==0)
             goto start;
         else if (cont==2)
             goto end;
-        cont = game(LVL5, word, guessed,5);
+        cont = game(LVL5, word, guessed,5,sizeof(LVL5)/MAX);
         if (cont==0||cont==1)
             goto start;
         else if (cont==2)
